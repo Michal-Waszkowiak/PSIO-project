@@ -1,26 +1,28 @@
 #include "fallenenemy.h"
 
-void Fallenenemy::createShape()
-{
-    this->shape.setRadius(rand() % 10 + 10);
-    this->shape.setPointCount(rand() % 20 + 3);
-    this->shape.setFillColor(sf::Color(rand()%255+1,rand()%255+1,rand()%255+1,255));
-}
-
 void Fallenenemy::createVariables()
 {
+    this->pointCount = rand() % 8 + 3;
     this->type = 0;
-    this->speed = 5;
-    this->hpMax = 10;
-    this->hp = 0;
-    this->damage = 1;
-    this->points = 5;
+    this->speed = static_cast<float>(this->pointCount);
+    this->hpMax = static_cast<int>(this->pointCount/2);
+    this->hp = this->hpMax;
+    this->damage = this->pointCount;
+    this->points = this->pointCount;
+}
+
+void Fallenenemy::createShape()
+{
+    this->shape.setRadius(this->pointCount*5);
+    this->shape.setPointCount(this->pointCount);
+    this->shape.setFillColor(sf::Color(rand()%255+1,rand()%255+1,rand()%255+1,255));
 }
 
 Fallenenemy::Fallenenemy(float pos_x, float pos_y)
 {
-    this->createShape();
     this->createVariables();
+    this->createShape();
+
     this->shape.setPosition(pos_x,pos_y);
 }
 
@@ -34,6 +36,16 @@ const sf::FloatRect Fallenenemy::getBounds() const
 {
     return this->shape.getGlobalBounds();
 
+}
+
+const int &Fallenenemy::getPoints() const
+{
+    return this->points;
+}
+
+const int &Fallenenemy::getDamage() const
+{
+    return this->damage;
 }
 
 //Functions

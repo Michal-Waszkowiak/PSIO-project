@@ -1,8 +1,9 @@
 #pragma once
 #include "library.h"
 #include "player.h"
-#include "platform.h"
 #include "tilemap.h"
+#include "bullet.h"
+#include "fallenenemy.h"
 
 
 class Game
@@ -16,16 +17,40 @@ private:
     float windowHeight;
     float windowWidth;
 
+    //Player
     Player* player;
-    Platform* platform;
-    TileMap map;
+
+    sf::RectangleShape playerHPbar;
+    sf::RectangleShape playerHPbarBack;
+
+    //Tilemap
+    TileMap tilemap;
+
+    //Enemies
+    float spawnTimer;
+    float spawnTimerMax;
+    std::vector<Fallenenemy*> fallenemies;
+
+    //Resources
+    std::map<std::string, sf::Texture*> textures;
+    std::vector<Bullet*> bullets;
+
+    //GUI
+    sf::Font font;
+    sf::Text pointText;
+
+    //Systems
+    unsigned points;
 
 
     //Creating stuff
 
     void createWindow();
     void createPlayer();
-    void createPlatform();
+    void createGUI();
+    void createSystems();
+    void createTextures();
+    void createFallenEnemies();
 
 public:
     //Constructors | Deconstructors
@@ -38,9 +63,15 @@ public:
     void updatePlayer();
     void updateCollision();
     void updateLevel();
+    void updateGUI();
+    void updateBullets();
+    void updateFallenEnemies();
+    void updateCombat();
     void update();
     void renderPlayer();
-    void renderPlatform();
+    void renderGUI();
+    void renderBulletes();
+    void renderFallenEnemies();
     void render();
     const sf::RenderWindow& getWindow() const;
 };

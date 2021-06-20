@@ -26,9 +26,9 @@ void Player::createSprite()
 
 void Player::createView()
 {
-    this->view.reset(sf::FloatRect(0.f,0.f,800.f,600.f));
+    this->view.reset(sf::FloatRect(0.f,0.f,1000.f,800.f));
     this->view.setCenter(this->sprite.getPosition().x + this->sprite.getGlobalBounds().width / 2.f,
-                         this->sprite.getPosition().y + this->sprite.getGlobalBounds().height / 2.f);
+                         this->sprite.getPosition().y + this->sprite.getGlobalBounds().height - 368.f);
 
 }
 
@@ -46,9 +46,13 @@ void Player::createPhysics()
     this->drag = 0.8f;
     this->gravity = 4.f;
     this->velocityMaxY = 15.f;
-    this->onGround = false;
+    this->attackCooldownMax = 10;
+    this->attackCooldown = this->attackCooldownMax;
+    this->hpMax = 100;
+    this->hp = this->hpMax;
 
 }
+
 
 
 Player::Player()
@@ -77,6 +81,16 @@ const sf::FloatRect Player::getGlobalBounds() const
     return this->sprite.getGlobalBounds();
 }
 
+int Player::getHp() const
+{
+    return this->hp;
+}
+
+int Player::getHpMax() const
+{
+    return this->hpMax;
+}
+
 void Player::setPosition(const float x, const float y)
 {
     this->sprite.setPosition(x,y);
@@ -85,6 +99,35 @@ void Player::setPosition(const float x, const float y)
 void Player::resetVelocityY()
 {
     this->velocity.y = 0.f;
+}
+
+void Player::resetVelocityX()
+{
+    this->velocity.x = 0.f;
+}
+
+void Player::setHp(const int hp_)
+{
+    this->hp = hp_;
+}
+
+void Player::loseHp(const int value_)
+{
+    this->hp -= value_;
+    if(this->hp < 0)
+    {
+        this->hp = 0;
+    }
+}
+
+bool Player::canAttack()
+{
+    if(this->attackCooldown >= this->attackCooldownMax)
+    {
+        this->attackCooldown = 0;
+        return true;
+    }
+    return false;
 }
 
 void Player::move(const float direction_x, const float direction_y)
@@ -99,6 +142,7 @@ void Player::move(const float direction_x, const float direction_y)
     }
 
 }
+
 
 void Player::speed()
 {
@@ -134,6 +178,15 @@ void Player::updatePhysics()
     }
 
     this->sprite.move(this->velocity);
+}
+
+void Player::updateAttack()
+{
+    if(this->attackCooldown < this->attackCooldownMax)
+    {
+        this->attackCooldown += 0.5;
+    }
+
 }
 
 void Player::updateMovement()
@@ -217,19 +270,11 @@ void Player::update()
     this->updateAnimation();
     this->createView();
     this->updatePhysics();
+    this->updateAttack();
 
 }
 
 void Player::render(sf::RenderTarget &target)
 {
     target.draw(this->sprite);
-
-    sf::CircleShape circle;
-    circle.setFillColor(sf::Color::Red);
-    circle.setRadius(2.f);
-    circle.setPosition(this->sprite.getPosition());
-
-
-    target.draw(circle);
-
 }

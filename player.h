@@ -24,7 +24,10 @@ private:
     float drag;
     float gravity;
     float velocityMaxY;
-    bool onGround;
+    float attackCooldown;
+    float attackCooldownMax;
+    int hp;
+    int hpMax;
 
 
     void createVariables();
@@ -42,16 +45,24 @@ public:
     //Accessors
     const sf::Vector2f getPosition() const;
     const sf::FloatRect getGlobalBounds() const;
+    int getHp() const;
+    int getHpMax() const;
     sf::View view;
 
     //Modifiers
     void setPosition(const float x, const float y);
     void resetVelocityY();
+    void resetVelocityX();
+    void setHp(const int hp_);
+    void loseHp(const int value_);
 
     //Functions
+    bool canAttack();
+
     void move(const float direction_x, const float direction_y);
     void speed();
     void updatePhysics();
+    void updateAttack();
     void updateMovement();
     void updateAnimation();
     void update();

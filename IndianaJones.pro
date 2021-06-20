@@ -12,15 +12,19 @@ CONFIG(debug, debug|release){
 }
 
 SOURCES += \
+    bullet.cpp \
+    enemy.cpp \
+    fallenenemy.cpp \
         game.cpp \
         main.cpp \
-    platform.cpp \
         player.cpp \
     tilemap.cpp
 
 HEADERS += \
+    bullet.h \
+    enemy.h \
+    fallenenemy.h \
     game.h \
     library.h \
-    platform.h \
     player.h \
     tilemap.h

@@ -7,6 +7,8 @@
 #include <cstdlib>
 #include <cmath>
 #include <map>
+#include <sstream>
+#include <string>
 
 //SMFL
 
