@@ -4,6 +4,7 @@
 #include "tilemap.h"
 #include "bullet.h"
 #include "fallenenemy.h"
+#include "medkit.h"
 
 
 class Game
@@ -31,6 +32,11 @@ private:
     float spawnTimerMax;
     std::vector<Fallenenemy*> fallenemies;
 
+    //Medkits
+    float spawnTimerMed;
+    float spawnTimerMaxMed;
+    std::vector<Medkit*> medkits;
+
     //Resources
     std::map<std::string, sf::Texture*> textures;
     std::vector<Bullet*> bullets;
@@ -51,6 +57,7 @@ private:
     void createSystems();
     void createTextures();
     void createFallenEnemies();
+    void createMedkits();
 
 public:
     //Constructors | Deconstructors
@@ -66,12 +73,14 @@ public:
     void updateGUI();
     void updateBullets();
     void updateFallenEnemies();
+    void updateMedkits();
     void updateCombat();
     void update();
     void renderPlayer();
     void renderGUI();
     void renderBulletes();
     void renderFallenEnemies();
+    void renderMedkits();
     void render();
     const sf::RenderWindow& getWindow() const;
 };

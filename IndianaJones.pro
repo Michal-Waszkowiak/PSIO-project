@@ -17,6 +17,7 @@ SOURCES += \
     fallenenemy.cpp \
         game.cpp \
         main.cpp \
+    medkit.cpp \
         player.cpp \
     tilemap.cpp
 
@@ -26,5 +27,6 @@ HEADERS += \
     fallenenemy.h \
     game.h \
     library.h \
+    medkit.h \
     player.h \
     tilemap.h

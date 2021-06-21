@@ -55,6 +55,7 @@ public:
     void resetVelocityX();
     void setHp(const int hp_);
     void loseHp(const int value_);
+    void pickUpHp(const int givehp_);
 
     //Functions
     bool canAttack();

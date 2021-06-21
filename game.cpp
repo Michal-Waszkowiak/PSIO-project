@@ -52,6 +52,12 @@ void Game::createFallenEnemies()
     this->spawnTimer = this->spawnTimerMax;
 }
 
+void Game::createMedkits()
+{
+    this->spawnTimerMaxMed = 1;
+    this->spawnTimerMed = this->spawnTimerMax;
+}
+
 Game::Game()
 {
     this->createWindow();
@@ -202,6 +208,29 @@ void Game::updateFallenEnemies()
     ++counter;
 }
 
+void Game::updateMedkits()
+{
+unsigned counter = 0;
+
+this->spawnTimerMed += 0.00001;
+if(this->spawnTimerMed >= this->spawnTimerMaxMed)
+{
+    this->medkits.push_back(new Medkit(rand()% 1500 - 20, this->window.getSize().y - 32));
+    this->spawnTimerMed = 0;
+}
+for(auto *meds : this->medkits)
+{
+    meds->update();
+    if(meds->getBounds().intersects(this->player->getGlobalBounds()))
+    {
+        this->player->pickUpHp(this->medkits.at(counter)->getHp());
+        delete this->medkits.at(counter);
+        this->medkits.erase(this->medkits.begin() + counter);
+    }
+}
+++counter;
+
+}
 void Game::updateCombat()
 {
     for(size_t i = 0; i < this->fallenemies.size(); i++)
@@ -232,6 +261,7 @@ void Game::update()
     this->updateCollision();
     this->updateBullets();
     this->updateFallenEnemies();
+    this->updateMedkits();
     this->updateCombat();
     this->updateGUI();
 
@@ -282,6 +312,14 @@ void Game::renderFallenEnemies()
     }
 }
 
+void Game::renderMedkits()
+{
+    for(auto meds : this->medkits)
+    {
+        meds->render(this->window);
+    }
+}
+
 
 void Game::render()
 {
@@ -293,6 +331,7 @@ void Game::render()
     this->renderPlayer();
     this->window.setView(this->player->view);
     this->renderBulletes();
+    this->renderMedkits();
     this->renderFallenEnemies();
     this->renderGUI();
 

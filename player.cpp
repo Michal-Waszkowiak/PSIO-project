@@ -120,6 +120,15 @@ void Player::loseHp(const int value_)
     }
 }
 
+void Player::pickUpHp(const int givehp_)
+{
+    this->hp += givehp_;
+    if(this->hp > this->hpMax)
+    {
+        this->hp = this->hpMax;
+    }
+}
+
 bool Player::canAttack()
 {
     if(this->attackCooldown >= this->attackCooldownMax)
