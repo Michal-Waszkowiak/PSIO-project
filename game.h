@@ -17,6 +17,7 @@ private:
     sf::Event eve;
     float windowHeight;
     float windowWidth;
+    bool endGame;
 
     //Player
     Player* player;
@@ -44,6 +45,8 @@ private:
     //GUI
     sf::Font font;
     sf::Text pointText;
+    sf::Text WinGameText;
+    sf::Text LoseGameText;
 
     //Systems
     unsigned points;
@@ -52,6 +55,9 @@ private:
     //Creating stuff
 
     void createWindow();
+    void createVariables();
+    void createFonts();
+    void createText();
     void createPlayer();
     void createGUI();
     void createSystems();
@@ -65,8 +71,12 @@ public:
     Game();
     virtual ~Game();
 
+    //Accessors
+    const bool& getEndGame() const;
+
     //Functions
 
+    void pollEvents();
     void updatePlayer();
     void updateCollision();
     void updateLevel();
@@ -75,6 +85,8 @@ public:
     void updateFallenEnemies();
     void updateMedkits();
     void updateCombat();
+    void updateLose();
+    void updateWin();
     void update();
     void renderPlayer();
     void renderGUI();

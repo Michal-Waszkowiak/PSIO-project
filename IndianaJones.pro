@@ -13,6 +13,7 @@ CONFIG(debug, debug|release){
 
 SOURCES += \
     bullet.cpp \
+    door.cpp \
     enemy.cpp \
     fallenenemy.cpp \
         game.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
 
 HEADERS += \
     bullet.h \
+    door.h \
     enemy.h \
     fallenenemy.h \
     game.h \

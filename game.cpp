@@ -9,6 +9,34 @@ void Game::createWindow()
 
 }
 
+void Game::createVariables()
+{
+    this->endGame = false;
+}
+
+void Game::createFonts()
+{
+    if(!this->font.loadFromFile("fonts/GistLight.otf"))
+    {
+        std::cout<<"ERROR!! WRONG FONTS HERE"<<std::endl;
+    }
+}
+
+void Game::createText()
+{
+    this->LoseGameText.setFont(this->font);
+    this->LoseGameText.setFillColor(sf::Color::Red);
+    this->LoseGameText.setCharacterSize(36);
+    this->LoseGameText.setPosition(sf::Vector2f(0,this->window.getSize().y/2));
+    this->LoseGameText.setString("PRZEGRALES!! WYJDZ Z GRY!!");
+
+    this->WinGameText.setFont(this->font);
+    this->WinGameText.setFillColor(sf::Color::Red);
+    this->WinGameText.setCharacterSize(36);
+    this->WinGameText.setPosition(sf::Vector2f(0,this->window.getSize().y/2));
+    this->WinGameText.setString("WYGRALES!! TO JUZ KONIEC \n MOZESZ WYJSC Z GRY");
+}
+
 void Game::createPlayer()
 {
     this->player = new Player();
@@ -16,11 +44,6 @@ void Game::createPlayer()
 
 void Game::createGUI()
 {
-    if(!this->font.loadFromFile("fonts/GistLight.otf"))
-    {
-        std::cout<<"ERROR!! WRONG FONTS HERE"<<std::endl;
-    }
-
     this->pointText.setFont(this->font);
     this->pointText.setCharacterSize(32);
     this->pointText.setFillColor(sf::Color::White);
@@ -61,6 +84,9 @@ void Game::createMedkits()
 Game::Game()
 {
     this->createWindow();
+    this->createVariables();
+    this->createFonts();
+    this->createText();
     this->createPlayer();
     this->createGUI();
     this->createSystems();
@@ -87,11 +113,50 @@ Game::~Game()
         delete  i;
     }
 
+    for(auto *i : this->medkits)
+    {
+        delete  i;
+    }
+
+}
+
+const bool &Game::getEndGame() const
+{
+    return this->endGame;
+}
+
+void Game::pollEvents()
+{
+    //window events
+    while(this->window.pollEvent(this->eve))
+    {
+        if(this->eve.type == sf::Event::Closed)
+            this->window.close();
+        else if(this->eve.type == sf::Event::KeyPressed && this->eve.key.code == sf::Keyboard::Escape)
+            this->window.close();
+
+    }
+
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->player->canAttack())
+    {
+        this->bullets.push_back(new Bullet(this->textures["BULLET"],this->player->getPosition().x+this->player->getGlobalBounds().width/2,
+                                this->player->getPosition().y+this->player->getGlobalBounds().height/2,0,-1,5));
+    }
 }
 
 void Game::updatePlayer()
 {
     this->player->update();
+
+    if(this->player->getHp() <= 0)
+    {
+        this->endGame = true;
+    }
+
+    if(this->points >= 50)
+    {
+        this->endGame = true;
+    }
 
 }
 
@@ -212,7 +277,7 @@ void Game::updateMedkits()
 {
 unsigned counter = 0;
 
-this->spawnTimerMed += 0.00001;
+this->spawnTimerMed += 500;
 if(this->spawnTimerMed >= this->spawnTimerMaxMed)
 {
     this->medkits.push_back(new Medkit(rand()% 1500 - 20, this->window.getSize().y - 32));
@@ -256,29 +321,18 @@ void Game::updateCombat()
 
 void Game::update()
 {
+    this->pollEvents();
+
+    if(this->endGame == false)
+    {
     this->updatePlayer();
     this->updateLevel();
     this->updateCollision();
     this->updateBullets();
     this->updateFallenEnemies();
-    this->updateMedkits();
+    //this->updateMedkits();
     this->updateCombat();
     this->updateGUI();
-
-    //window events
-    while(this->window.pollEvent(this->eve))
-    {
-        if(this->eve.type == sf::Event::Closed)
-            this->window.close();
-        else if(this->eve.type == sf::Event::KeyPressed && this->eve.key.code == sf::Keyboard::Escape)
-            this->window.close();
-
-    }
-
-    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->player->canAttack())
-    {
-        this->bullets.push_back(new Bullet(this->textures["BULLET"],this->player->getPosition().x+this->player->getGlobalBounds().width/2,
-                                this->player->getPosition().y+this->player->getGlobalBounds().height/2,0,-1,5));
     }
 
 }
@@ -329,11 +383,28 @@ void Game::render()
     //Render
     this->window.draw(tilemap);
     this->renderPlayer();
-    this->window.setView(this->player->view);
+
     this->renderBulletes();
     this->renderMedkits();
     this->renderFallenEnemies();
     this->renderGUI();
+
+    if(this->endGame == false)
+    {
+        this->window.setView(this->player->view);
+    }
+
+    if(this->endGame == true && this->points >= 50)
+    {
+        this->window.clear(sf::Color::White);
+        this->window.draw(this->WinGameText);
+    }
+
+    if(this->endGame == true && this->playerHPbar.getSize().x <= 0)
+    {
+        this->window.clear(sf::Color::White);
+        this->window.draw(this->LoseGameText);
+    }
 
 
     //Display game
