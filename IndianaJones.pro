@@ -19,8 +19,10 @@ SOURCES += \
         game.cpp \
         main.cpp \
     medkit.cpp \
+    objectstomove.cpp \
         player.cpp \
-    tilemap.cpp
+    tilemap.cpp \
+    treasure.cpp
 
 HEADERS += \
     bullet.h \
@@ -30,5 +32,7 @@ HEADERS += \
     game.h \
     library.h \
     medkit.h \
+    objectstomove.h \
     player.h \
-    tilemap.h
+    tilemap.h \
+    treasure.h

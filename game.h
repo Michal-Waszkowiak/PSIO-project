@@ -6,6 +6,8 @@
 #include "fallenenemy.h"
 #include "medkit.h"
 #include "door.h"
+#include "objectstomove.h"
+#include "treasure.h"
 
 
 class Game
@@ -21,6 +23,7 @@ private:
     float windowWidth;
     bool endGame;
     bool extraLevel;
+    bool extraLevelExtra;
 
     //Player
     Player* player;
@@ -39,10 +42,17 @@ private:
     float spawnTimerMax;
     std::vector<Fallenenemy*> fallenemies;
 
+    //ObjectsToMove
+    std::vector<ObjectsToMove*> objectstomove;
+    int numberOfObjects;
+
     //Medkits
     float spawnTimerMed;
     float spawnTimerMaxMed;
     std::vector<Medkit*> medkits;
+
+    //Treasure
+    Treasure* treasure;
 
     //Resources
     std::map<std::string, sf::Texture*> textures;
@@ -62,7 +72,6 @@ private:
 
 
     //Creating stuff
-
     void createWindow();
     void createVariables();
     void createLoadText();
@@ -75,6 +84,8 @@ private:
     void createTextures();
     void createFallenEnemies();
     void createMedkits();
+    void createObjectsToMove();
+    void createTreasure();
 
 public:
     //Constructors | Deconstructors
@@ -98,6 +109,8 @@ public:
     void updateBullets();
     void updateFallenEnemies();
     void updateMedkits();
+    void updateObjectsToMove();
+    void updateTreasure();
     void updateCombat();
     void update();
     void renderPlayer();
@@ -106,6 +119,8 @@ public:
     void renderBulletes();
     void renderFallenEnemies();
     void renderMedkits();
+    void renderObjectsToMove();
+    void renderTreasure();
     void render();
 
     //Extra level

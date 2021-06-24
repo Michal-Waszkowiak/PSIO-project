@@ -1,5 +1,6 @@
 #include "game.h"
 
+
 void Game::createWindow()
 {
     this->windowHeight = 800;
@@ -14,6 +15,7 @@ void Game::createVariables()
 {
     this->endGame = true;
     this->extraLevel = true;
+    this->extraLevelExtra = false;
 }
 
 void Game::createLoadText()
@@ -66,6 +68,9 @@ void Game::createText()
                              "\n ruch w prawo - D"
                              "\n strzelanie - lewy przycisk myszy"
                              "\n interakcja z drzwiami - Q "
+                             "\n Minigra - sterowanie: "
+                             "\n przesuwanie przeciwnikow - lewy przycisk myszy"
+                             "\n wziecie skarbu - prawy przycisk myszy"
                              "\n \n \n Aby rozpoczac wcisnij srodkowy przycisk myszy");
 }
 
@@ -114,8 +119,18 @@ void Game::createFallenEnemies()
 
 void Game::createMedkits()
 {
-    this->spawnTimerMaxMed = 1;
+    this->spawnTimerMaxMed = 50;
     this->spawnTimerMed = this->spawnTimerMax;
+}
+
+void Game::createObjectsToMove()
+{
+    this->numberOfObjects = 20;
+}
+
+void Game::createTreasure()
+{
+    this->treasure = new Treasure();
 }
 
 Game::Game()
@@ -131,12 +146,14 @@ Game::Game()
     this->createSystems();
     this->createTextures();
     this->createFallenEnemies();
+    this->createTreasure();
 }
 
 Game::~Game()
 {
     delete this->player;
     delete  this->door;
+    delete this->treasure;
 
     for(auto &i : this->textures)
     {
@@ -158,6 +175,11 @@ Game::~Game()
         delete  i;
     }
 
+    for(auto *i : this->objectstomove)
+    {
+        delete i;
+    }
+
 }
 
 const bool &Game::getEndGame() const
@@ -169,6 +191,7 @@ const bool &Game::getExtraLevel() const
 {
     return this->extraLevel;
 }
+
 
 void Game::pollEvents()
 {
@@ -199,6 +222,29 @@ void Game::pollEvents()
         this->extraLevel = false;
     }
 
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->extraLevel == false)
+    {
+        sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+        for(size_t i=0; i < objectstomove.size(); i++)
+        {
+            if(objectstomove[i]->isClicked(mousePosition))
+            {
+                    objectstomove[i]->changePos(this->window.getSize().x,this->window.getSize().y);
+            }
+        }
+    }
+
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Right) && this->extraLevel == false)
+    {
+        sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+            if(this->treasure->isClicked(mousePosition))
+            {
+                this->extraLevel = true;
+                this->extraLevelExtra = true;
+            }
+    }
+
+
 }
 
 void Game::updatePlayer()
@@ -221,10 +267,6 @@ void Game::updateDoor()
 {
     this->door->update();
     this->door->setPosition(1800,607);
-
-
-
-
 }
 
 void Game::updateCollision()
@@ -363,6 +405,20 @@ for(auto *meds : this->medkits)
 ++counter;
 
 }
+
+void Game::updateObjectsToMove()
+{
+    for(int i = 0; i < this->numberOfObjects; i++)
+    {
+        this->objectstomove.push_back(new ObjectsToMove(rand()% this->window.getSize().x, rand()% this->window.getSize().y));
+    }
+}
+
+void Game::updateTreasure()
+{
+    this->treasure->update();
+    this->treasure->setPosition(this->window.getSize().x/2,this->window.getSize().y/2);
+}
 void Game::updateCombat()
 {
     for(size_t i = 0; i < this->fallenemies.size(); i++)
@@ -402,6 +458,12 @@ void Game::update()
         //this->updateMedkits();
         this->updateCombat();
         this->updateGUI();
+    }
+
+    if(this->extraLevel == false)
+    {
+        this->updateObjectsToMove();
+        this->updateTreasure();
     }
 
 }
@@ -448,6 +510,19 @@ void Game::renderMedkits()
     }
 }
 
+void Game::renderObjectsToMove()
+{
+    for(int i = 0; i < this->numberOfObjects; i ++)
+    {
+        this->objectstomove[i]->render(this->window);
+    }
+}
+
+void Game::renderTreasure()
+{
+    this->treasure->render(this->window);
+}
+
 
 void Game::render()
 {
@@ -492,6 +567,17 @@ void Game::render()
     if(this->extraLevel == false)
     {
         this->window.clear(sf::Color::Blue);
+        this->window.setView(view);
+        this->renderTreasure();
+        this->renderObjectsToMove();
+    }
+
+    if(this->extraLevel == true && this->extraLevelExtra == true)
+    {
+        this->window.clear(sf::Color::White);
+        this->window.draw(this->WinGameText);
+        this->window.setView(view);
+
     }
 
 
