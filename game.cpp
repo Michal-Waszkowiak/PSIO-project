@@ -6,6 +6,7 @@ void Game::createWindow()
     this->windowWidth = 1000;
     this->window.create(sf::VideoMode(windowWidth,windowHeight), "Indiana Jones", sf::Style::Titlebar | sf::Style::Close);
     this->window.setFramerateLimit(60);
+    this->view.reset(sf::FloatRect(0,0,this->windowWidth,this->windowHeight));
 
 }
 
@@ -478,12 +479,14 @@ void Game::render()
     {
         this->window.clear(sf::Color::White);
         this->window.draw(this->WinGameText);
+        this->window.setView(view);
     }
 
     if(this->endGame == true && this->playerHPbar.getSize().x <= 0)
     {
         this->window.clear(sf::Color::White);
         this->window.draw(this->LoseGameText);
+        this->window.setView(view);
     }
 
     if(this->extraLevel == false)

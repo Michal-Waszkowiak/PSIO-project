@@ -15,6 +15,7 @@ private:
     //Variables
 
     sf::RenderWindow window;
+    sf::View view;
     sf::Event eve;
     float windowHeight;
     float windowWidth;
