@@ -1,0 +1,14 @@
+Witaj w grze Indiana Jones
+Pomoz wydostac sie bohaterowi na zewnatrz,
+niszczac odpowiednia ilosc spadajacych kamieni (gracz musi uzyskac 50 punktow)
+lub przechodzac minigre znajdujaca sie za drzwiami.
+Sterowanie:
+ruch w lewo - A
+ruch w prawo - D
+strzelanie - lewy przycisk myszy
+interakcja z drzwiami - Q
+Minigra - sterowanie:
+przesuwanie przeciwnikow - lewy przycisk myszy
+wziecie skarbu - prawy przycisk myszy
+
+Aby rozpoczac wcisnij srodkowy przycisk myszy

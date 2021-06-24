@@ -11,7 +11,7 @@ void ObjectsToMove::createTexture()
 void ObjectsToMove::createSprite()
 {
     this->sprite.setTexture(this->texture);
-    this->sprite.setScale(3.f,3.f);
+    this->sprite.setScale(10.f,10.f);
 }
 
 ObjectsToMove::ObjectsToMove(float pos_x, float pos_y)
@@ -19,7 +19,8 @@ ObjectsToMove::ObjectsToMove(float pos_x, float pos_y)
     this->createTexture();
     this->createSprite();
 
-    this->sprite.setPosition(pos_x,pos_y);
+    auto[x,y] = getRandomPosition(pos_x,pos_y);
+    this->sprite.setPosition(x,y);
 }
 
 ObjectsToMove::~ObjectsToMove()
@@ -51,9 +52,17 @@ bool ObjectsToMove::isClicked(const sf::Vector2f &mouse_position) const
         return false;
 }
 
-void ObjectsToMove::setPos(const float x, const float y)
+std::pair<int, int> ObjectsToMove::getRandomPosition(size_t resolution_x, size_t resolution_y)
 {
-    this->sprite.setPosition(x,y);
+        size_t x = 0;
+        size_t y = 0;
+        do
+        {
+         x = rand() % resolution_x;
+         y = rand() % resolution_y;
+        }while((x > 0) && (x < resolution_x) && (y > 0) && (y < resolution_y));
+
+        return std::pair<int,int>(x,y);
 }
 
 void ObjectsToMove::changePos(const size_t x_, const size_t y_)

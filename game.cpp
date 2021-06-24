@@ -421,7 +421,7 @@ void Game::updateObjectsToMove()
 {
     for(int i = 0; i < this->numberOfObjects; i++)
     {
-        this->objectstomove.push_back(new ObjectsToMove(rand()% this->window.getSize().x, rand()% this->window.getSize().y));
+        this->objectstomove.push_back(new ObjectsToMove(this->window.getSize().x, this->window.getSize().y));
     }
 }
 
@@ -466,7 +466,7 @@ void Game::update()
         this->updateCollision();
         this->updateBullets();
         this->updateFallenEnemies();
-        this->updateMedkits();
+        //this->updateMedkits();
         this->updateCombat();
         this->updateGUI();
     }
@@ -555,7 +555,7 @@ void Game::render()
         this->renderPlayer();
 
         this->renderBulletes();
-        this->renderMedkits();
+        //this->renderMedkits();
         this->renderFallenEnemies();
         this->renderGUI();
         this->window.setView(this->player->view);
