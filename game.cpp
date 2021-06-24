@@ -11,7 +11,22 @@ void Game::createWindow()
 
 void Game::createVariables()
 {
-    this->endGame = false;
+    this->endGame = true;
+    this->extraLevel = true;
+}
+
+void Game::createLoadText()
+{
+    this->plik.open("fonts/opis.txt", std::ios::in);
+        if(plik.good() == true)
+        {
+            while(!this->plik.eof())
+            {
+                getline(this->plik, linia);
+                std::cout << linia << std::endl;
+            }
+            plik.close();
+        }
 }
 
 void Game::createFonts()
@@ -35,11 +50,32 @@ void Game::createText()
     this->WinGameText.setCharacterSize(36);
     this->WinGameText.setPosition(sf::Vector2f(0,this->window.getSize().y/2));
     this->WinGameText.setString("WYGRALES!! TO JUZ KONIEC \n MOZESZ WYJSC Z GRY");
+
+    this->OpisText.setFont(this->font);
+    this->OpisText.setFillColor(sf::Color::Black);
+    this->OpisText.setCharacterSize(32);
+    this->OpisText.setPosition(sf::Vector2f(0,0));
+    this->OpisText.setString("Witaj w grze Indiana Jones \n Pomoz wydostac sie bohaterowi na zewnatrz, "
+                             "\n niszczac odpowiednia ilosc spadajacych kamieni"
+                             "\n(gracz musi uzyskac 50 punktow)"
+                             "\n lub przechodzac minigre znajdujaca sie za drzwiami."
+                             "\n Sterowanie:"
+                             "\n"
+                             "\n ruch w lewo - A"
+                             "\n ruch w prawo - D"
+                             "\n strzelanie - lewy przycisk myszy"
+                             "\n interakcja z drzwiami - Q "
+                             "\n \n \n Aby rozpoczac wcisnij srodkowy przycisk myszy");
 }
 
 void Game::createPlayer()
 {
     this->player = new Player();
+}
+
+void Game::createDoor()
+{
+    this->door = new Door();
 }
 
 void Game::createGUI()
@@ -85,9 +121,11 @@ Game::Game()
 {
     this->createWindow();
     this->createVariables();
+    this->createLoadText();
     this->createFonts();
     this->createText();
     this->createPlayer();
+    this->createDoor();
     this->createGUI();
     this->createSystems();
     this->createTextures();
@@ -97,6 +135,7 @@ Game::Game()
 Game::~Game()
 {
     delete this->player;
+    delete  this->door;
 
     for(auto &i : this->textures)
     {
@@ -125,6 +164,11 @@ const bool &Game::getEndGame() const
     return this->endGame;
 }
 
+const bool &Game::getExtraLevel() const
+{
+    return this->extraLevel;
+}
+
 void Game::pollEvents()
 {
     //window events
@@ -142,6 +186,18 @@ void Game::pollEvents()
         this->bullets.push_back(new Bullet(this->textures["BULLET"],this->player->getPosition().x+this->player->getGlobalBounds().width/2,
                                 this->player->getPosition().y+this->player->getGlobalBounds().height/2,0,-1,5));
     }
+
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Middle) && this->endGame == true)
+    {
+        this->endGame = false;
+    }
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && this->door->getBounds().intersects(this->player->getGlobalBounds()))
+    {
+        this->endGame = true;
+        this->extraLevel = false;
+    }
+
 }
 
 void Game::updatePlayer()
@@ -157,6 +213,16 @@ void Game::updatePlayer()
     {
         this->endGame = true;
     }
+
+}
+
+void Game::updateDoor()
+{
+    this->door->update();
+    this->door->setPosition(1800,607);
+
+
+
 
 }
 
@@ -325,14 +391,16 @@ void Game::update()
 
     if(this->endGame == false)
     {
-    this->updatePlayer();
-    this->updateLevel();
-    this->updateCollision();
-    this->updateBullets();
-    this->updateFallenEnemies();
-    //this->updateMedkits();
-    this->updateCombat();
-    this->updateGUI();
+        this->updateDoor();
+        this->updatePlayer();
+
+        this->updateLevel();
+        this->updateCollision();
+        this->updateBullets();
+        this->updateFallenEnemies();
+        //this->updateMedkits();
+        this->updateCombat();
+        this->updateGUI();
     }
 
 }
@@ -341,6 +409,11 @@ void Game::renderPlayer()
 {
     this->player->render(this->window);
 
+}
+
+void Game::renderDoor()
+{
+    this->door->render(this->window);
 }
 
 void Game::renderGUI()
@@ -377,20 +450,27 @@ void Game::renderMedkits()
 
 void Game::render()
 {
-    //Clear window
-    this->window.clear(sf::Color::Black);
+    if(this->endGame == true)
+    {
+        this->window.clear(sf::Color::Yellow);
+        this->window.draw(this->OpisText);
 
-    //Render
-    this->window.draw(tilemap);
-    this->renderPlayer();
-
-    this->renderBulletes();
-    this->renderMedkits();
-    this->renderFallenEnemies();
-    this->renderGUI();
+    }
 
     if(this->endGame == false)
     {
+        //Clear window
+        this->window.clear(sf::Color::Black);
+
+        //Render
+        this->window.draw(tilemap);
+        this->renderDoor();
+        this->renderPlayer();
+
+        this->renderBulletes();
+        this->renderMedkits();
+        this->renderFallenEnemies();
+        this->renderGUI();
         this->window.setView(this->player->view);
     }
 
@@ -404,6 +484,11 @@ void Game::render()
     {
         this->window.clear(sf::Color::White);
         this->window.draw(this->LoseGameText);
+    }
+
+    if(this->extraLevel == false)
+    {
+        this->window.clear(sf::Color::Blue);
     }
 
 

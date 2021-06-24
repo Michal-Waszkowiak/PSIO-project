@@ -10,7 +10,6 @@ private:
     sf::Texture textureSheet;
     sf::Clock animationTime;
 
-
     //Animation
     short animationStates;
     sf::IntRect currentFrame;

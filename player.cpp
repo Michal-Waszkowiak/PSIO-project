@@ -1,5 +1,5 @@
-#include "library.h"
 #include "player.h"
+
 
 void Player::createVariables()
 {

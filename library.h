@@ -9,6 +9,7 @@
 #include <map>
 #include <sstream>
 #include <string>
+#include <fstream>
 
 //SMFL
 
