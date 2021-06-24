@@ -4,6 +4,7 @@
 class Medkit
 {
 private:
+    //Variables
     sf::RectangleShape shape;
     int giveHp;
 

@@ -6,6 +6,7 @@ enum PLAYER_ANIMATION_STATES {IDLE = 0, MOVING_LEFT, MOVING_RIGHT, ATTACK};
 class Player
 {
 private:
+    //Variables
     sf:: Sprite sprite;
     sf::Texture textureSheet;
     sf::Clock animationTime;

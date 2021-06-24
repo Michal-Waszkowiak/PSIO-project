@@ -5,8 +5,8 @@
 class Bullet
 {
 private:
+    //Variables
     sf::Sprite sprite;
-
     sf::Vector2f direction;
     float bulletSpeed;
 
@@ -17,7 +17,7 @@ public:
 
     //Accessor
     const sf::FloatRect getBounds() const;
-
+    //Functions
     void update();
     void render(sf::RenderTarget& target);
 };

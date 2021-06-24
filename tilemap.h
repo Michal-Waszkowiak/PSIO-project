@@ -13,6 +13,7 @@ private:
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+    //Variables
     sf::VertexArray m_vertices;
     sf::Texture m_tileset;
 };

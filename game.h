@@ -19,6 +19,7 @@ private:
     sf::RenderWindow window;
     sf::View view;
     sf::Event eve;
+
     float windowHeight;
     float windowWidth;
     bool endGame;
@@ -96,6 +97,7 @@ public:
     //Accessors
     const bool& getEndGame() const;
     const bool& getExtraLevel() const;
+    void losePoints(const int loseP_);
 
     //Functions
     void pollEvents();

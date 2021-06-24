@@ -5,6 +5,7 @@
 class ObjectsToMove
 {
 private:
+    //Variables
     sf::Texture texture;
     sf::Sprite sprite;
 

@@ -129,6 +129,7 @@ void Player::pickUpHp(const int givehp_)
     }
 }
 
+
 bool Player::canAttack()
 {
     if(this->attackCooldown >= this->attackCooldownMax)

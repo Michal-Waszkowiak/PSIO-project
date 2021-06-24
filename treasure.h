@@ -6,6 +6,7 @@
 class Treasure
 {
 private:
+    //Variables
     sf:: Sprite sprite;
     sf::Texture texture;
 

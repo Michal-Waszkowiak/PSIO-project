@@ -9,6 +9,7 @@ void Fallenenemy::createVariables()
     this->hp = this->hpMax;
     this->damage = this->pointCount;
     this->points = this->pointCount;
+    this->losePoints = this->pointCount;
 }
 
 void Fallenenemy::createShape()
@@ -46,6 +47,11 @@ const int &Fallenenemy::getPoints() const
 const int &Fallenenemy::getDamage() const
 {
     return this->damage;
+}
+
+const int &Fallenenemy::getLosePoints() const
+{
+    return this->losePoints;
 }
 
 //Functions

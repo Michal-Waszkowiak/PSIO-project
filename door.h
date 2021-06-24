@@ -6,6 +6,7 @@
 class Door
 {
 private:
+    //Variables
     sf:: Sprite sprite;
     sf::Texture textureSheet;
     sf::IntRect currentFrame;

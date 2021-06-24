@@ -5,6 +5,7 @@
 class Fallenenemy
 {
 private:
+    //Variables
     unsigned pointCount;
     sf::CircleShape shape;
     int type;
@@ -13,6 +14,7 @@ private:
     int hpMax;
     int damage;
     int points;
+    int losePoints;
 
 
     void createVariables();
@@ -26,6 +28,7 @@ public:
     const sf::FloatRect getBounds() const;
     const int& getPoints() const;
     const int& getDamage() const;
+    const int& getLosePoints() const;
 
     //Functions
     void update();

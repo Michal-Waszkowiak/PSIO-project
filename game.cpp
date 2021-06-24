@@ -192,6 +192,11 @@ const bool &Game::getExtraLevel() const
     return this->extraLevel;
 }
 
+void Game::losePoints(const int loseP_)
+{
+    this->points -= loseP_;
+}
+
 
 void Game::pollEvents()
 {
@@ -257,6 +262,11 @@ void Game::updatePlayer()
     }
 
     if(this->points >= 50)
+    {
+        this->endGame = true;
+    }
+
+    if(this->points < 0)
     {
         this->endGame = true;
     }
@@ -374,6 +384,7 @@ void Game::updateFallenEnemies()
         else if(fallenemy->getBounds().intersects(this->player->getGlobalBounds()))
         {
             this->player->loseHp(this->fallenemies.at(counter)->getDamage());
+            this->losePoints(this->fallenemies.at(counter)->getLosePoints());
             delete this->fallenemies.at(counter);
             this->fallenemies.erase(this->fallenemies.begin() + counter);
         }
@@ -455,7 +466,7 @@ void Game::update()
         this->updateCollision();
         this->updateBullets();
         this->updateFallenEnemies();
-        //this->updateMedkits();
+        this->updateMedkits();
         this->updateCombat();
         this->updateGUI();
     }
